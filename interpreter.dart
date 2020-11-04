@@ -59,13 +59,17 @@ class Interpreter {
 
     var currentChar = source[pos];
 
-    // if currentChar.isAnNumber: return integer token
-    var currentCharAsInt = int.tryParse(currentChar);
-    if (currentCharAsInt is int) {
-      var token = Token(Types.Integer, currentCharAsInt);
+    // try to scan a list of numbers (= integer)
+    var integer = '';
+    while (int.tryParse(currentChar) is int) {
+      integer += currentChar;
+      if (pos + 1 == source.length) {
+        break;
+      }
       pos += 1;
-      return token;
+      currentChar = source[pos];
     }
+    if (integer != '') return Token(Types.Integer, int.tryParse(integer));
 
     // if currentChar.isPlus: return addition token
     if (currentChar == '+') {
