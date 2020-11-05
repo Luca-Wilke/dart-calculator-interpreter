@@ -3,6 +3,7 @@ import 'dart:io';
 enum Types {
   Integer,
   Addition,
+  Substraction,
   EOF
 }
 
@@ -83,8 +84,15 @@ class Interpreter {
       return token;
     }
 
+    // if currentChar.isMinus: return substraction token
+    if (currentChar == '-') {
+      var token = Token(Types.Substraction, '-');
+      pos += 1;
+      return token;
+    }
+
     // error: current char not of type addition, integer or end of file
-    throw Exception('Error parsing input.\nCould not find token of type addition, integer or EOF.');
+    throw Exception('Error parsing input.\nCould not find token of type addition, integer or EOF. Current char: {$currentChar}. Current token: {$currentToken}');
   }
 
   void eat(Types tokenType) {
@@ -98,7 +106,17 @@ class Interpreter {
     if (currentToken.type == tokenType) {
       currentToken = getNextToken();
     } else {
-      throw Exception('Error parsing input.\nCurrent token {$currentToken} does not match expected token of type {$tokenType}');
+      throw Exception('Error parsing input.\nCurrent token {$currentToken} does not match expected token type {$tokenType}');
+    }
+  }
+
+  void eatOr(List<Types> tokenTypes) {
+    // expect multiple possible token types
+
+    if (tokenTypes.contains(currentToken.type)) {
+      currentToken = getNextToken();
+    } else {
+      throw Exception('Error parsing input.\nCurrent token {$currentToken} does not match one of exptected token types {$tokenTypes}');
     }
   }
 
@@ -113,8 +131,8 @@ class Interpreter {
     eat(Types.Integer);
 
     // operator
-    var _ = currentToken;
-    eat(Types.Addition);
+    var op = currentToken.type;
+    eatOr([Types.Addition, Types.Substraction]);
 
     var right = currentToken;
     eat(Types.Integer);
@@ -129,7 +147,8 @@ class Interpreter {
     effectively interpreting client input
     */
 
-    var result = left.value + right.value;
+    // is operator of type addition? return left + right. otherwise return left - right
+    var result = (op == Types.Addition) ? (left.value + right.value) : (left.value - right.value);
     return result;
   }
 }
