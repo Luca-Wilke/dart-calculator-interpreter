@@ -57,6 +57,12 @@ class Interpreter {
     apart into tokens. One token at a time.
     */
 
+    // if index > source.numberOfCharacters: return end of file token
+    if (pos > source.length - 1) {
+      print('EOF');
+      return Token(Types.EOF, null);
+    }
+
     var currentChar = source[pos];
 
     // check for whitespace characters and ignore them
@@ -68,6 +74,7 @@ class Interpreter {
 
     // if index > source.numberOfCharacters: return end of file token
     if (pos > source.length - 1) {
+      print('EOF');
       return Token(Types.EOF, null);
     }
 
@@ -75,8 +82,8 @@ class Interpreter {
     var integer = '';
     while (int.tryParse(currentChar) is int) {
       integer += currentChar;
-      if (pos + 1 == source.length) break;
       pos += 1;
+      if (pos == source.length) break;
       currentChar = source[pos];
     }
     if (integer != '') return Token(Types.Integer, int.tryParse(integer));
@@ -141,6 +148,11 @@ class Interpreter {
     var right = currentToken;
     eat(Types.Integer);
 
+    // expect the last token to be end of file. expressions like "2 + 1   5" or "32 - 4 +" are invalid
+    if (currentToken.type != Types.EOF) {
+      throw Exception('Error parsing input.\n Expected token to be EOF but got {$currentToken}');
+    }
+
     /*
     after the above call the self.current_token is set to
     EOF token
@@ -153,6 +165,7 @@ class Interpreter {
 
     // is operator of type addition? return left + right. otherwise return left - right
     var result = (op == Types.Addition) ? (left.value + right.value) : (left.value - right.value);
+
     return result;
   }
 }
