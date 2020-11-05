@@ -144,7 +144,7 @@ class Interpreter {
 
     // expect the last token to be end of file. expressions like "2 + 1   5" or "32 - 4 +" are invalid
     if (currentToken.type != Types.EOF) {
-      throw Exception('Error parsing input.\n Expected token to be EOF but got {$currentToken}');
+      throw Exception('Error parsing input.\nExpected token to be EOF but got {$currentToken}');
     }
 
     /*
