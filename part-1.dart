@@ -58,9 +58,7 @@ class Interpreter {
     */
 
     // if index > source.numberOfCharacters: return end of file token
-    if (pos > source.length - 1) {
-      return Token(Types.EOF, null);
-    }
+    if (pos > source.length - 1) return Token(Types.EOF, null);
 
     var currentChar = source[pos];
 
@@ -72,9 +70,7 @@ class Interpreter {
     }
 
     // if index > source.numberOfCharacters: return end of file token
-    if (pos > source.length - 1) {
-      return Token(Types.EOF, null);
-    }
+    if (pos > source.length - 1) return Token(Types.EOF, null);
 
     // try to scan a list of numbers (= integer)
     var integer = '';
