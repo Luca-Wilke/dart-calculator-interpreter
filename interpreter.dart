@@ -52,20 +52,25 @@ class Interpreter {
     apart into tokens. One token at a time.
     */
 
+    var currentChar = source[pos];
+
+    // check for whitespace characters and ignore them
+    while (currentChar == ' ') {
+      pos += 1;
+      if (pos == source.length) break;
+      currentChar = source[pos];
+    }
+
     // if index > source.numberOfCharacters: return end of file token
     if (pos > source.length - 1) {
       return Token(Types.EOF, null);
     }
 
-    var currentChar = source[pos];
-
     // try to scan a list of numbers (= integer)
     var integer = '';
     while (int.tryParse(currentChar) is int) {
       integer += currentChar;
-      if (pos + 1 == source.length) {
-        break;
-      }
+      if (pos + 1 == source.length) break;
       pos += 1;
       currentChar = source[pos];
     }
@@ -79,7 +84,7 @@ class Interpreter {
     }
 
     // error: current char not of type addition, integer or end of file
-    throw Exception('Error parsing input');
+    throw Exception('Error parsing input.\nCould not find token of type addition, integer or EOF.');
   }
 
   void eat(Types tokenType) {
@@ -93,7 +98,7 @@ class Interpreter {
     if (currentToken.type == tokenType) {
       currentToken = getNextToken();
     } else {
-      throw Exception('Error parsing input');
+      throw Exception('Error parsing input.\nCurrent token {$currentToken} does not match expected token of type {$tokenType}');
     }
   }
 
