@@ -8,7 +8,7 @@ enum Types {
   Integer,
   Addition,
   Substraction,
-  EOF
+  EOF //end of file
 }
 
 void main(List<String> args) {
@@ -26,7 +26,7 @@ void main(List<String> args) {
 }
 
 class Token {
-  // integer, addition or end of file
+  // integer, addition, substraction or end of file
   Types type;
   // value of type
   dynamic value;
