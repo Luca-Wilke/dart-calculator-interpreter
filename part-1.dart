@@ -59,7 +59,6 @@ class Interpreter {
 
     // if index > source.numberOfCharacters: return end of file token
     if (pos > source.length - 1) {
-      print('EOF');
       return Token(Types.EOF, null);
     }
 
@@ -74,7 +73,6 @@ class Interpreter {
 
     // if index > source.numberOfCharacters: return end of file token
     if (pos > source.length - 1) {
-      print('EOF');
       return Token(Types.EOF, null);
     }
 
